@@ -11,12 +11,15 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.ActivityForm = void 0;
 var react_1 = require("react");
 var semantic_ui_react_1 = require("semantic-ui-react");
 var uuid_1 = require("uuid");
-exports.ActivityForm = function (_a) {
-    var setEditMode = _a.setEditMode, initialFormState = _a.activity, createActivity = _a.createActivity, editActivity = _a.editActivity, submitting = _a.submitting;
+var activityStore_1 = require("../../../app/stores/activityStore");
+var mobx_react_lite_1 = require("mobx-react-lite");
+var ActivityForm = function (_a) {
+    var initialFormState = _a.activity;
+    var activityStore = react_1.useContext(activityStore_1["default"]);
+    var createActivity = activityStore.createActivity, editActivity = activityStore.editActivity, submitting = activityStore.submitting, cancelFormOpen = activityStore.cancelFormOpen;
     var initializeForm = function () {
         if (initialFormState) {
             return initialFormState;
@@ -51,11 +54,12 @@ exports.ActivityForm = function (_a) {
     return (react_1["default"].createElement(semantic_ui_react_1.Segment, { clearing: true },
         react_1["default"].createElement(semantic_ui_react_1.Form, { onSubmit: handleSubmit },
             react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'title', placeholder: 'Title', value: activity.title }),
-            react_1["default"].createElement(semantic_ui_react_1.Form.TextArea, { rows: 2, onChange: handleInputChange, name: 'description', placeholder: 'Description', value: activity.description }),
+            react_1["default"].createElement(semantic_ui_react_1.Form.TextArea, { onChange: handleInputChange, name: 'description', rows: 2, placeholder: 'Description', value: activity.description }),
             react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'category', placeholder: 'Category', value: activity.category }),
             react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'date', type: 'datetime-local', placeholder: 'Date', value: activity.date }),
             react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'city', placeholder: 'City', value: activity.city }),
             react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'venue', placeholder: 'Venue', value: activity.venue }),
             react_1["default"].createElement(semantic_ui_react_1.Button, { loading: submitting, floated: 'right', positive: true, type: 'submit', content: 'Submit' }),
-            react_1["default"].createElement(semantic_ui_react_1.Button, { onClick: function () { return setEditMode(false); }, floated: 'right', type: 'button', content: 'Cancel' }))));
+            react_1["default"].createElement(semantic_ui_react_1.Button, { onClick: cancelFormOpen, floated: 'right', type: 'button', content: 'Cancel' }))));
 };
+exports["default"] = mobx_react_lite_1.observer(ActivityForm);

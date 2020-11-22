@@ -14,7 +14,7 @@ var requests = {
 };
 var Activities = {
     list: function () { return requests.get('/activities'); },
-    details: function (id) { return requests.get("/activities/" + id + " "); },
+    details: function (id) { return requests.get("/activities/" + id); },
     create: function (activity) { return requests.post('/activities', activity); },
     update: function (activity) { return requests.put("/activities/" + activity.id, activity); },
     "delete": function (id) { return requests.del("/activities/" + id); }

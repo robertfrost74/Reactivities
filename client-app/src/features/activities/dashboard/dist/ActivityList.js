@@ -1,12 +1,14 @@
 "use strict";
 exports.__esModule = true;
-exports.ActivityList = void 0;
 var react_1 = require("react");
 var semantic_ui_react_1 = require("semantic-ui-react");
-exports.ActivityList = function (_a) {
-    var activities = _a.activities, selectActivity = _a.selectActivity, deleteActivity = _a.deleteActivity, submitting = _a.submitting, target = _a.target;
+var mobx_react_lite_1 = require("mobx-react-lite");
+var activityStore_1 = require("../../../app/stores/activityStore");
+var ActivityList = function () {
+    var activityStore = react_1.useContext(activityStore_1["default"]);
+    var activitiesByDate = activityStore.activitiesByDate, selectActivity = activityStore.selectActivity, deleteActivity = activityStore.deleteActivity, submitting = activityStore.submitting, target = activityStore.target;
     return (react_1["default"].createElement(semantic_ui_react_1.Segment, { clearing: true },
-        react_1["default"].createElement(semantic_ui_react_1.Item.Group, { divided: true }, activities.map(function (activity) { return (react_1["default"].createElement(semantic_ui_react_1.Item, { key: activity.id },
+        react_1["default"].createElement(semantic_ui_react_1.Item.Group, { divided: true }, activitiesByDate.map(function (activity) { return (react_1["default"].createElement(semantic_ui_react_1.Item, { key: activity.id },
             react_1["default"].createElement(semantic_ui_react_1.Item.Content, null,
                 react_1["default"].createElement(semantic_ui_react_1.Item.Header, { as: 'a' }, activity.title),
                 react_1["default"].createElement(semantic_ui_react_1.Item.Meta, null, activity.date),
@@ -21,3 +23,4 @@ exports.ActivityList = function (_a) {
                     react_1["default"].createElement(semantic_ui_react_1.Button, { name: activity.id, loading: target === activity.id && submitting, onClick: function (e) { return deleteActivity(e, activity.id); }, floated: 'right', content: 'Delete', color: 'red' }),
                     react_1["default"].createElement(semantic_ui_react_1.Label, { basic: true, content: activity.category }))))); }))));
 };
+exports["default"] = mobx_react_lite_1.observer(ActivityList);
