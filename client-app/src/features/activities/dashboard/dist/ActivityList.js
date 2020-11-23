@@ -4,9 +4,10 @@ var react_1 = require("react");
 var semantic_ui_react_1 = require("semantic-ui-react");
 var mobx_react_lite_1 = require("mobx-react-lite");
 var activityStore_1 = require("../../../app/stores/activityStore");
+var react_router_dom_1 = require("react-router-dom");
 var ActivityList = function () {
     var activityStore = react_1.useContext(activityStore_1["default"]);
-    var activitiesByDate = activityStore.activitiesByDate, selectActivity = activityStore.selectActivity, deleteActivity = activityStore.deleteActivity, submitting = activityStore.submitting, target = activityStore.target;
+    var activitiesByDate = activityStore.activitiesByDate, deleteActivity = activityStore.deleteActivity, submitting = activityStore.submitting, target = activityStore.target;
     return (react_1["default"].createElement(semantic_ui_react_1.Segment, { clearing: true },
         react_1["default"].createElement(semantic_ui_react_1.Item.Group, { divided: true }, activitiesByDate.map(function (activity) { return (react_1["default"].createElement(semantic_ui_react_1.Item, { key: activity.id },
             react_1["default"].createElement(semantic_ui_react_1.Item.Content, null,
@@ -19,7 +20,7 @@ var ActivityList = function () {
                         ", ",
                         activity.venue)),
                 react_1["default"].createElement(semantic_ui_react_1.Item.Extra, null,
-                    react_1["default"].createElement(semantic_ui_react_1.Button, { onClick: function () { return selectActivity(activity.id); }, floated: 'right', content: 'View', color: 'blue' }),
+                    react_1["default"].createElement(semantic_ui_react_1.Button, { as: react_router_dom_1.Link, to: "/activities/" + activity.id, floated: 'right', content: 'View', color: 'blue' }),
                     react_1["default"].createElement(semantic_ui_react_1.Button, { name: activity.id, loading: target === activity.id && submitting, onClick: function (e) { return deleteActivity(e, activity.id); }, floated: 'right', content: 'Delete', color: 'red' }),
                     react_1["default"].createElement(semantic_ui_react_1.Label, { basic: true, content: activity.category }))))); }))));
 };

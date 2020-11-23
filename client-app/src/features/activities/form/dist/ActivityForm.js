@@ -17,33 +17,39 @@ var uuid_1 = require("uuid");
 var activityStore_1 = require("../../../app/stores/activityStore");
 var mobx_react_lite_1 = require("mobx-react-lite");
 var ActivityForm = function (_a) {
-    var initialFormState = _a.activity;
+    var match = _a.match, history = _a.history;
     var activityStore = react_1.useContext(activityStore_1["default"]);
-    var createActivity = activityStore.createActivity, editActivity = activityStore.editActivity, submitting = activityStore.submitting, cancelFormOpen = activityStore.cancelFormOpen;
-    var initializeForm = function () {
-        if (initialFormState) {
-            return initialFormState;
+    var createActivity = activityStore.createActivity, editActivity = activityStore.editActivity, submitting = activityStore.submitting, initialFormState = activityStore.activity, loadActivity = activityStore.loadActivity, clearActivity = activityStore.clearActivity;
+    var _b = react_1.useState({
+        id: '',
+        title: '',
+        category: '',
+        description: '',
+        date: '',
+        city: '',
+        venue: ''
+    }), activity = _b[0], setActivity = _b[1];
+    react_1.useEffect(function () {
+        if (match.params.id && activity.id.length === 0) {
+            loadActivity(match.params.id).then(function () { return initialFormState && setActivity(initialFormState); });
         }
-        else {
-            return {
-                id: '',
-                title: '',
-                category: '',
-                description: '',
-                date: '',
-                city: '',
-                venue: ''
-            };
-        }
-    };
-    var _b = react_1.useState(initializeForm), activity = _b[0], setActivity = _b[1];
+        return (function () {
+            clearActivity();
+        });
+    }, [
+        loadActivity,
+        match.params.id,
+        clearActivity,
+        initialFormState,
+        activity.id.length
+    ]);
     var handleSubmit = function () {
         if (activity.id.length === 0) {
-            var newActivity = __assign(__assign({}, activity), { id: uuid_1.v4() });
-            createActivity(newActivity);
+            var newActivity_1 = __assign(__assign({}, activity), { id: uuid_1.v4() });
+            createActivity(newActivity_1).then(function () { return history.push("/activities/" + newActivity_1.id); });
         }
         else {
-            editActivity(activity);
+            editActivity(activity).then(function () { return history.push("/activities/" + activity.id); });
         }
     };
     var handleInputChange = function (event) {
@@ -60,6 +66,6 @@ var ActivityForm = function (_a) {
             react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'city', placeholder: 'City', value: activity.city }),
             react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'venue', placeholder: 'Venue', value: activity.venue }),
             react_1["default"].createElement(semantic_ui_react_1.Button, { loading: submitting, floated: 'right', positive: true, type: 'submit', content: 'Submit' }),
-            react_1["default"].createElement(semantic_ui_react_1.Button, { onClick: cancelFormOpen, floated: 'right', type: 'button', content: 'Cancel' }))));
+            react_1["default"].createElement(semantic_ui_react_1.Button, { onClick: function () { return history.push('/activities'); }, floated: 'right', type: 'button', content: 'Cancel' }))));
 };
 exports["default"] = mobx_react_lite_1.observer(ActivityForm);

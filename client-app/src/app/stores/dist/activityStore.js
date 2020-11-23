@@ -50,9 +50,8 @@ var ActivityStore = /** @class */ (function () {
     function ActivityStore() {
         var _this = this;
         this.activityRegistry = new Map();
-        this.activities = [];
+        this.activity = null;
         this.loadingInitial = false;
-        this.editMode = false;
         this.submitting = false;
         this.target = '';
         this.loadActivities = function () { return __awaiter(_this, void 0, void 0, function () {
@@ -81,13 +80,54 @@ var ActivityStore = /** @class */ (function () {
                         mobx_1.runInAction(function () {
                             _this.loadingInitial = false;
                         });
+                        console.log(error_1);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
             });
         }); };
+        this.loadActivity = function (id) { return __awaiter(_this, void 0, void 0, function () {
+            var activity, error_2;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        activity = this.getActivity(id);
+                        if (!activity) return [3 /*break*/, 1];
+                        this.activity = activity;
+                        return [3 /*break*/, 5];
+                    case 1:
+                        this.loadingInitial = true;
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, agent_1["default"].Activities.details(id)];
+                    case 3:
+                        activity = _a.sent();
+                        mobx_1.runInAction(function () {
+                            _this.activity = activity;
+                            _this.loadingInitial = false;
+                        });
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_2 = _a.sent();
+                        mobx_1.runInAction(function () {
+                            _this.loadingInitial = false;
+                        });
+                        console.log(error_2);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.clearActivity = function () {
+            _this.activity = null;
+        };
+        this.getActivity = function (id) {
+            return _this.activityRegistry.get(id);
+        };
         this.createActivity = function (activity) { return __awaiter(_this, void 0, void 0, function () {
-            var error_2;
+            var error_3;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -101,38 +141,6 @@ var ActivityStore = /** @class */ (function () {
                         _a.sent();
                         mobx_1.runInAction(function () {
                             _this.activityRegistry.set(activity.id, activity);
-                            _this.editMode = false;
-                            _this.submitting = false;
-                        });
-                        return [3 /*break*/, 4];
-                    case 3:
-                        error_2 = _a.sent();
-                        mobx_1.runInAction(function () {
-                            _this.submitting = false;
-                        });
-                        console.log(error_2);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        }); };
-        this.editActivity = function (activity) { return __awaiter(_this, void 0, void 0, function () {
-            var error_3;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.submitting = true;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, agent_1["default"].Activities.update(activity)];
-                    case 2:
-                        _a.sent();
-                        mobx_1.runInAction(function () {
-                            _this.activityRegistry.set(activity.id, activity);
-                            _this.selectedActivity = activity;
-                            _this.editMode = false;
                             _this.submitting = false;
                         });
                         return [3 /*break*/, 4];
@@ -147,8 +155,38 @@ var ActivityStore = /** @class */ (function () {
                 }
             });
         }); };
-        this.deleteActivity = function (event, id) { return __awaiter(_this, void 0, void 0, function () {
+        this.editActivity = function (activity) { return __awaiter(_this, void 0, void 0, function () {
             var error_4;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.submitting = true;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, agent_1["default"].Activities.update(activity)];
+                    case 2:
+                        _a.sent();
+                        mobx_1.runInAction(function () {
+                            _this.activityRegistry.set(activity.id, activity);
+                            _this.activity = activity;
+                            _this.submitting = false;
+                        });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_4 = _a.sent();
+                        mobx_1.runInAction(function () {
+                            _this.submitting = false;
+                        });
+                        console.log(error_4);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.deleteActivity = function (event, id) { return __awaiter(_this, void 0, void 0, function () {
+            var error_5;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -168,35 +206,24 @@ var ActivityStore = /** @class */ (function () {
                         });
                         return [3 /*break*/, 4];
                     case 3:
-                        error_4 = _a.sent();
+                        error_5 = _a.sent();
                         mobx_1.runInAction(function () {
                             _this.submitting = false;
                             _this.target = '';
                         });
-                        console.log(error_4);
+                        console.log(error_5);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
             });
         }); };
-        this.openCreateForm = function () {
-            _this.editMode = true;
-            _this.selectedActivity = undefined;
-        };
-        this.openEditForm = function (id) {
-            _this.selectedActivity = _this.activityRegistry.get(id);
-            _this.editMode = true;
-        };
-        this.cancelSelectedActivity = function () {
-            _this.selectedActivity = undefined;
-        };
-        this.cancelFormOpen = function () {
-            _this.editMode = false;
-        };
-        this.selectActivity = function (id) {
-            _this.selectedActivity = _this.activityRegistry.get(id);
-            _this.editMode = false;
-        };
+        mobx_1.makeObservable(this, {
+            activityRegistry: mobx_1.observable,
+            activity: mobx_1.observable,
+            loadingInitial: mobx_1.observable,
+            submitting: mobx_1.observable,
+            target: mobx_1.observable
+        });
     }
     Object.defineProperty(ActivityStore.prototype, "activitiesByDate", {
         get: function () {
@@ -206,56 +233,11 @@ var ActivityStore = /** @class */ (function () {
         configurable: true
     });
     __decorate([
-        mobx_1.observable
-    ], ActivityStore.prototype, "activityRegistry");
-    __decorate([
-        mobx_1.observable
-    ], ActivityStore.prototype, "activities");
-    __decorate([
-        mobx_1.observable
-    ], ActivityStore.prototype, "selectedActivity");
-    __decorate([
-        mobx_1.observable
-    ], ActivityStore.prototype, "loadingInitial");
-    __decorate([
-        mobx_1.observable
-    ], ActivityStore.prototype, "editMode");
-    __decorate([
-        mobx_1.observable
-    ], ActivityStore.prototype, "submitting");
-    __decorate([
-        mobx_1.observable
-    ], ActivityStore.prototype, "target");
-    __decorate([
-        mobx_1.computed
-    ], ActivityStore.prototype, "activitiesByDate");
+        mobx_1.action
+    ], ActivityStore.prototype, "loadActivity");
     __decorate([
         mobx_1.action
-    ], ActivityStore.prototype, "loadActivities");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "createActivity");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "editActivity");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "deleteActivity");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "openCreateForm");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "openEditForm");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "cancelSelectedActivity");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "cancelFormOpen");
-    __decorate([
-        mobx_1.action
-    ], ActivityStore.prototype, "selectActivity");
+    ], ActivityStore.prototype, "clearActivity");
     return ActivityStore;
 }());
 exports["default"] = react_1.createContext(new ActivityStore());
