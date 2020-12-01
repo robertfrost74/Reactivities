@@ -57,15 +57,17 @@ var ActivityForm = function (_a) {
         var _b = event.currentTarget, name = _b.name, value = _b.value;
         setActivity(__assign(__assign({}, activity), (_a = {}, _a[name] = value, _a)));
     };
-    return (react_1["default"].createElement(semantic_ui_react_1.Segment, { clearing: true },
-        react_1["default"].createElement(semantic_ui_react_1.Form, { onSubmit: handleSubmit },
-            react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'title', placeholder: 'Title', value: activity.title }),
-            react_1["default"].createElement(semantic_ui_react_1.Form.TextArea, { onChange: handleInputChange, name: 'description', rows: 2, placeholder: 'Description', value: activity.description }),
-            react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'category', placeholder: 'Category', value: activity.category }),
-            react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'date', type: 'datetime-local', placeholder: 'Date', value: activity.date }),
-            react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'city', placeholder: 'City', value: activity.city }),
-            react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'venue', placeholder: 'Venue', value: activity.venue }),
-            react_1["default"].createElement(semantic_ui_react_1.Button, { loading: submitting, floated: 'right', positive: true, type: 'submit', content: 'Submit' }),
-            react_1["default"].createElement(semantic_ui_react_1.Button, { onClick: function () { return history.push('/activities'); }, floated: 'right', type: 'button', content: 'Cancel' }))));
+    return (react_1["default"].createElement(semantic_ui_react_1.Grid, null,
+        react_1["default"].createElement(semantic_ui_react_1.Grid.Column, { width: 10 },
+            react_1["default"].createElement(semantic_ui_react_1.Segment, { clearing: true },
+                react_1["default"].createElement(semantic_ui_react_1.Form, { onSubmit: handleSubmit },
+                    react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'title', placeholder: 'Title', value: activity.title }),
+                    react_1["default"].createElement(semantic_ui_react_1.Form.TextArea, { onChange: handleInputChange, name: 'description', rows: 2, placeholder: 'Description', value: activity.description }),
+                    react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'category', placeholder: 'Category', value: activity.category }),
+                    react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'date', type: 'datetime-local', placeholder: 'Date', value: activity.date }),
+                    react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'city', placeholder: 'City', value: activity.city }),
+                    react_1["default"].createElement(semantic_ui_react_1.Form.Input, { onChange: handleInputChange, name: 'venue', placeholder: 'Venue', value: activity.venue }),
+                    react_1["default"].createElement(semantic_ui_react_1.Button, { loading: submitting, floated: 'right', positive: true, type: 'submit', content: 'Submit' }),
+                    react_1["default"].createElement(semantic_ui_react_1.Button, { onClick: function () { return history.push('/activities'); }, floated: 'right', type: 'button', content: 'Cancel' }))))));
 };
 exports["default"] = mobx_react_lite_1.observer(ActivityForm);

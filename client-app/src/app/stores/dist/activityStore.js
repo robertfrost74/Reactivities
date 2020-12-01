@@ -41,6 +41,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
 var mobx_1 = require("mobx");
 var react_1 = require("react");
@@ -227,11 +234,25 @@ var ActivityStore = /** @class */ (function () {
     }
     Object.defineProperty(ActivityStore.prototype, "activitiesByDate", {
         get: function () {
-            return Array.from(this.activityRegistry.values()).sort(function (a, b) { return Date.parse(a.date) - Date.parse(b.date); });
+            return this.groupActivitiesByDate(Array.from(this.activityRegistry.values()));
         },
         enumerable: false,
         configurable: true
     });
+    ActivityStore.prototype.groupActivitiesByDate = function (activities) {
+        var sortedActivities = activities.sort(function (a, b) { return Date.parse(a.date) - Date.parse(b.date); });
+        return Object.entries(sortedActivities.reduce(function (activities, activity) {
+            var date = activity.date.split('T')[0];
+            activities[date] = activities[date] ? __spreadArrays(activities[date], [activity]) : [activity];
+            return activities;
+        }, {}));
+    };
+    __decorate([
+        mobx_1.computed
+    ], ActivityStore.prototype, "activitiesByDate");
+    __decorate([
+        mobx_1.action
+    ], ActivityStore.prototype, "loadActivities");
     __decorate([
         mobx_1.action
     ], ActivityStore.prototype, "loadActivity");

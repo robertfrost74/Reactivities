@@ -4,24 +4,15 @@ var react_1 = require("react");
 var semantic_ui_react_1 = require("semantic-ui-react");
 var mobx_react_lite_1 = require("mobx-react-lite");
 var activityStore_1 = require("../../../app/stores/activityStore");
-var react_router_dom_1 = require("react-router-dom");
+var ActivityListItem_1 = require("./ActivityListItem");
 var ActivityList = function () {
     var activityStore = react_1.useContext(activityStore_1["default"]);
-    var activitiesByDate = activityStore.activitiesByDate, deleteActivity = activityStore.deleteActivity, submitting = activityStore.submitting, target = activityStore.target;
-    return (react_1["default"].createElement(semantic_ui_react_1.Segment, { clearing: true },
-        react_1["default"].createElement(semantic_ui_react_1.Item.Group, { divided: true }, activitiesByDate.map(function (activity) { return (react_1["default"].createElement(semantic_ui_react_1.Item, { key: activity.id },
-            react_1["default"].createElement(semantic_ui_react_1.Item.Content, null,
-                react_1["default"].createElement(semantic_ui_react_1.Item.Header, { as: 'a' }, activity.title),
-                react_1["default"].createElement(semantic_ui_react_1.Item.Meta, null, activity.date),
-                react_1["default"].createElement(semantic_ui_react_1.Item.Description, null,
-                    react_1["default"].createElement("div", null, activity.description),
-                    react_1["default"].createElement("div", null,
-                        activity.city,
-                        ", ",
-                        activity.venue)),
-                react_1["default"].createElement(semantic_ui_react_1.Item.Extra, null,
-                    react_1["default"].createElement(semantic_ui_react_1.Button, { as: react_router_dom_1.Link, to: "/activities/" + activity.id, floated: 'right', content: 'View', color: 'blue' }),
-                    react_1["default"].createElement(semantic_ui_react_1.Button, { name: activity.id, loading: target === activity.id && submitting, onClick: function (e) { return deleteActivity(e, activity.id); }, floated: 'right', content: 'Delete', color: 'red' }),
-                    react_1["default"].createElement(semantic_ui_react_1.Label, { basic: true, content: activity.category }))))); }))));
+    var activitiesByDate = activityStore.activitiesByDate;
+    return (react_1["default"].createElement(react_1.Fragment, null, activitiesByDate.map(function (_a) {
+        var group = _a[0], activities = _a[1];
+        return (react_1["default"].createElement(react_1.Fragment, { key: group },
+            react_1["default"].createElement(semantic_ui_react_1.Label, { size: 'large', color: 'blue' }, group),
+            react_1["default"].createElement(semantic_ui_react_1.Item.Group, { divided: true }, activities.map(function (activity) { return (react_1["default"].createElement(ActivityListItem_1.ActivityListItem, { key: activity.id, activity: activity })); }))));
+    })));
 };
 exports["default"] = mobx_react_lite_1.observer(ActivityList);
